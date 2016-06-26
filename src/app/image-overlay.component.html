@@ -1,6 +1,12 @@
 <h1>
   {{title}}
 </h1>
-<div id="preview" style="height:400px;width: 500px;">
-  
+<div class="card">
+  <div class="image_container source_image">
+    
+  </div>
+  <div id="preview" class="image_container">
+    <img [src]="image_result"  *ngIf="image_result"/>
+  </div>
 </div>
+
