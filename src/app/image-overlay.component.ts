@@ -38,15 +38,18 @@ declare var watermark;
 
 
 export class ImageOverlayAppComponent {
-  title = 'image-overlay works!';
+  title = 'Kustom Profile Pic';
   elementRef;
+  sourceImage;
   image_result;
+
   constructor( @Inject(ElementRef) elementRef: ElementRef) {
     console.log('watermark', watermark);
 
     // write multiple text watermarks
     var text = watermark.text
     this.elementRef = elementRef;
+
     //var attributeName = this.elementRef.nativeElement.attributes[0].name;
     console.log('elementRef ', this.elementRef.nativeElement.attributes[0]);
 
@@ -59,5 +62,24 @@ export class ImageOverlayAppComponent {
         this.image_result = img.src;
       });
   }
+
+  showFileSelector(){
+    let elem = this.elementRef.nativeElement.querySelector('#file_input');
+    let event = new Event('click');
+    elem.dispatchEvent(event);
+  }
   
+  updateSourceImage (event) {
+
+    let reader = new FileReader();
+    reader.onload = (e) => {
+      if (e.target['readyState'] && e.target['readyState'] == 2) {
+        console.log('here!');
+        this.sourceImage = e.target['result'];
+      }
+    };
+
+    reader.readAsDataURL(event.target.files[0]);
+
+  }
 }
