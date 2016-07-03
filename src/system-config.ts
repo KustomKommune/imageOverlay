@@ -2,50 +2,22 @@
  * User Configuration.
  **********************************************************************************************/
 /** Map relative paths to URLs. */
-const map: any = {
-  '@angular2-material': 'vendor/@angular2-material',
-  'watermarkjs': 'vendor/watermarkjs/dist/watermark.js'
+const map:any = {
+  '@angular2-material': 'vendor/@angular2-material/',
+  'watermarkjs': 'vendor/watermarkjs/dist/'
 };
 
 /** User packages configuration. */
-const packages: any = {
-  '@angular2-material/core': {
-    format: 'cjs',
-    defaultExtension: 'js',
-    main: 'core.js'
-  },
-  '@angular2-material/button': {
-    format: 'cjs',
-    defaultExtension: 'js',
-    main: 'button.js'
-  },
-  '@angular2-material/card': {
-    format: 'cjs',
-    defaultExtension: 'js',
-    main: 'card.js'
-  },
-  '@angular2-material/icon': {
-    format: 'cjs',
-    defaultExtension: 'js',
-    main: 'icon.js'
-  },
-  '@angular2-material/progress-circle': {
-    format: 'cjs',
-    defaultExtension: 'js',
-    main: 'progress-circle.js'
-  },
-  '@angular2-material/sidenav': {
-    format: 'cjs',
-    defaultExtension: 'js',
-    main: 'sidenav.js'
-  },
-  '@angular2-material/toolbar': {
-    format: 'cjs',
-    defaultExtension: 'js',
-    main: 'toolbar.js'
+const packages:any = {
+  'jquery': {
+    main: 'jquery.min',
+    format: 'global',
+    defaultExtension: 'js'
   },
   'watermarkjs': {
-    format: 'cjs'
+    main: 'watermark.min',
+    format: 'global',
+    defaultExtension: 'js'
   }
 };
 

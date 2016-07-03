@@ -4,10 +4,11 @@
 <div class="card">
   <div class="image_container source_image" (click)="showFileSelector()">
     <input type="file" id="file_input" (change)="updateSourceImage($event)" />
-    <img [src]="sourceImage"  *ngIf="sourceImage"/>
+    <img [attr.src]="sourceImage"  *ngIf="sourceImage"/>
   </div>
   <div id="preview" class="image_container">
-    <img [src]="image_result"  *ngIf="image_result"/>
+    <img [src]="imageResult"  *ngIf="imageResult"/>
   </div>
 </div>
+<canvas id="tempResizeCanvas"></canvas>
 
