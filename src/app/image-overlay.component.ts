@@ -1,4 +1,6 @@
 import { Component, ElementRef, Inject } from '@angular/core';
+import { ImagePlacementComponent } from './image-placement';
+import { RangeSliderComponent } from './range-slider';
 import 'watermarkjs';
 
 
@@ -23,7 +25,7 @@ declare var watermark;
   selector: 'image-overlay-app',
   templateUrl: 'image-overlay.component.html',
   styleUrls: ['image-overlay.component.css'],
-  directives: []
+  directives: [ImagePlacementComponent, RangeSliderComponent]
 })
 
 
@@ -32,8 +34,10 @@ export class ImageOverlayAppComponent {
   title = 'Kustom Profile Pic';
   elementRef;
   sourceImage;
+  resizedSourceImage;
   imageResult;
-  selectedOverlay = 'images/wrench_logo.jpg';
+  selectedOverlay;// = 'images/save_the_kommune_circle.jpg';
+  resizedOverlay;
 
   constructor( @Inject(ElementRef) elementRef: ElementRef) {
     console.log('watermark', watermark);
@@ -41,7 +45,9 @@ export class ImageOverlayAppComponent {
     // write multiple text watermarks
     var text = watermark.text
     this.elementRef = elementRef;
-
+    window.setTimeout(() => {
+      this.selectedOverlay = 'images/save_the_kommune_circle.jpg';
+    }, 1000);
     //var attributeName = this.elementRef.nativeElement.attributes[0].name;
     console.log('elementRef ', this.elementRef.nativeElement.attributes[0]);
     /*
@@ -54,7 +60,7 @@ export class ImageOverlayAppComponent {
       console.log('......', img[0]);//this.imageResult);
     });
     */
-
+    /*
     watermark(['images/wrench_logo.jpg', '/images/kk_logo.jpg'])
     .image(watermark.image.upperRight(0.5))
     .render()
@@ -62,11 +68,12 @@ export class ImageOverlayAppComponent {
       console.log('!!',img);
       this.imageResult = img[0].src;
     })
+    */
 
   }
 
 
-  resizeImage(targetImage) {
+  resizeImage(targetImage, _width, _height) {
 
     var promise = new Promise( (resolve, reject) => {
 
@@ -76,10 +83,17 @@ export class ImageOverlayAppComponent {
       image.onload = () => {
 
         var canvas = this.elementRef.nativeElement.querySelector("#tempResizeCanvas");
-        
-        if ( image.height > MAX_HEIGHT ) {
-          image.width *= MAX_HEIGHT / image.height;
-          image.height = MAX_HEIGHT;
+
+
+        /*
+        if ( image.height > _height ) {
+          image.width *= _height / image.height;
+          image.height = _height;
+        }
+        */
+        if ( image.width > _width ) {
+          image.height *= _width / image.width;
+          image.width = _width;
         }
 
         var ctx = canvas.getContext("2d");
@@ -87,8 +101,10 @@ export class ImageOverlayAppComponent {
         canvas.width = image.width;
         canvas.height = image.height;
         ctx.drawImage(image, 0, 0, image.width, image.height);
+        
         console.log('ctx', ctx);
-        resolve(ctx);
+        //resolve(ctx);
+        resolve(canvas.toDataURL("image/png"));
 
       };
 
@@ -112,10 +128,22 @@ export class ImageOverlayAppComponent {
     reader.onload = (e) => {
       if (e.target['readyState'] && e.target['readyState'] == 2) {
         console.log('here!');
-        this.resizeImage(e.target['result']);
+        this.resizeImage(e.target['result'], 180, 180).then((_image) => {
+          console.log('new image format ', _image);
+          this.resizedSourceImage = _image;
+          console.log('before ', this.selectedOverlay);
+          this.resizeImage(this.selectedOverlay, 180, 180).then((_overlay) => {
+            console.log('after ', this.selectedOverlay);
+            this.resizedOverlay = _overlay;
+            this.updateResult();
+          });
+          
+        });
+        /*
         this.sourceImage = e.target['result'];
         console.log('updateSourceImage', this);
         this.updateResult();
+        */
       }
     };
 
@@ -144,11 +172,13 @@ export class ImageOverlayAppComponent {
       console.log('......', this.imageResult);
     });
     */
-    watermark([this.sourceImage, this.selectedOverlay])
-    /*
-      .image(watermark.image.center(0.2))
+    //console.log('just before ', this.resizedSourceImage);
+    watermark([this.resizedSourceImage, this.resizedOverlay])
+    
+      .image(watermark.image.center(0.5))
       .render()
-      */
+      
+      /*
       .image(function(a, b){
         console.log('image2 functions ', a, b);
         b.width = 180;
@@ -156,8 +186,8 @@ export class ImageOverlayAppComponent {
         console.log(b.width, b.height);
         return [a, b];
       })
-
-      .render()
+      */
+      //.render()
       .then( (img) => {
         console.log('!!',img);
         this.imageResult = img[0].src;

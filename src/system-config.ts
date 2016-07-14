@@ -4,7 +4,9 @@
 /** Map relative paths to URLs. */
 const map:any = {
   '@angular2-material': 'vendor/@angular2-material/',
-  'watermarkjs': 'vendor/watermarkjs/dist/'
+  'jquery': 'vendor/jquery/dist/',
+  'watermarkjs': 'vendor/watermarkjs/dist/',
+  'rangesliderjs': 'vendor/rangeslider.js/dist/'
 };
 
 /** User packages configuration. */
@@ -16,6 +18,11 @@ const packages:any = {
   },
   'watermarkjs': {
     main: 'watermark.min',
+    format: 'global',
+    defaultExtension: 'js'
+  },
+  'rangesliderjs': {
+    main: 'rangeslider.min.js',
     format: 'global',
     defaultExtension: 'js'
   }
@@ -42,6 +49,8 @@ const barrels: string[] = [
   // App specific barrels.
   'app',
   'app/shared',
+  'app/image-placement',
+  'app/range-slider',
   /** @cli-barrel */
 ];
 
