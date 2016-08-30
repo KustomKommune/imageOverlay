@@ -1,9 +1,13 @@
+<app-range-slider></app-range-slider>
 <h1>
   {{title}}
 </h1>
 <div class="card">
   <div class="image_container source_image" (click)="showFileSelector()">
     <input type="file" id="file_input" (change)="updateSourceImage($event)" />
+    <div class="placeHolderTextWrap">
+      <div class="placeHolderText">Tap to select image</div>
+    </div>
     <img [attr.src]="sourceImage"  *ngIf="sourceImage"/>
   </div>
   <div id="preview" class="image_container">
@@ -11,4 +15,9 @@
   </div>
 </div>
 <canvas id="tempResizeCanvas"></canvas>
+<!--
+<div class="card">
+  <app-image-placement [sourceImageUrl]="selectedOverlay"></app-image-placement>
+</div>
+-->
 
