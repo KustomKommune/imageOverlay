@@ -40,35 +40,12 @@ export class ImageOverlayAppComponent {
   resizedOverlay;
 
   constructor( @Inject(ElementRef) elementRef: ElementRef) {
-    console.log('watermark', watermark);
 
-    // write multiple text watermarks
     var text = watermark.text
     this.elementRef = elementRef;
     window.setTimeout(() => {
       this.selectedOverlay = 'images/save_the_kommune_circle.jpg';
     }, 1000);
-    //var attributeName = this.elementRef.nativeElement.attributes[0].name;
-    console.log('elementRef ', this.elementRef.nativeElement.attributes[0]);
-    /*
-    watermark(['images/wrench_logo.jpg', '/images/kk_logo.jpg'])
-    //.image(watermark.image.lowerRight(0.5))
-    //.render()
-    .then( (img) => {
-
-      this.imageResult = img[0].src;
-      console.log('......', img[0]);//this.imageResult);
-    });
-    */
-    /*
-    watermark(['images/wrench_logo.jpg', '/images/kk_logo.jpg'])
-    .image(watermark.image.upperRight(0.5))
-    .render()
-    .then( (img) => {
-      console.log('!!',img);
-      this.imageResult = img[0].src;
-    })
-    */
 
   }
 
@@ -79,18 +56,23 @@ export class ImageOverlayAppComponent {
 
       var MAX_HEIGHT = 180;
       var image = new Image();
+      console.log('target image ', targetImage);
+      if (!targetImage) {
+        
+        image.src = '';
+        var canvas = this.elementRef.nativeElement.querySelector("#tempResizeCanvas");
+        var ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        resolve();
+      }
 
       image.onload = () => {
 
+        /**
+         * Temp image
+         */
         var canvas = this.elementRef.nativeElement.querySelector("#tempResizeCanvas");
 
-
-        /*
-        if ( image.height > _height ) {
-          image.width *= _height / image.height;
-          image.height = _height;
-        }
-        */
         if ( image.width > _width ) {
           image.height *= _width / image.width;
           image.width = _width;
@@ -101,9 +83,7 @@ export class ImageOverlayAppComponent {
         canvas.width = image.width;
         canvas.height = image.height;
         ctx.drawImage(image, 0, 0, image.width, image.height);
-        
-        console.log('ctx', ctx);
-        //resolve(ctx);
+
         resolve(canvas.toDataURL("image/png"));
 
       };
@@ -127,23 +107,16 @@ export class ImageOverlayAppComponent {
     let reader = new FileReader();
     reader.onload = (e) => {
       if (e.target['readyState'] && e.target['readyState'] == 2) {
-        console.log('here!');
         this.resizeImage(e.target['result'], 180, 180).then((_image) => {
-          console.log('new image format ', _image);
           this.resizedSourceImage = _image;
-          console.log('before ', this.selectedOverlay);
           this.resizeImage(this.selectedOverlay, 180, 180).then((_overlay) => {
-            console.log('after ', this.selectedOverlay);
             this.resizedOverlay = _overlay;
+            console.log('calling with null ');
+            this.resizeImage(null, null, null);
             this.updateResult();
           });
           
         });
-        /*
-        this.sourceImage = e.target['result'];
-        console.log('updateSourceImage', this);
-        this.updateResult();
-        */
       }
     };
 
@@ -152,44 +125,10 @@ export class ImageOverlayAppComponent {
   }
 
   updateResult() {
-    console.log('updateResult');
-    /*
-    watermark(['images/wrench_logo.jpg'])
-      .image(watermark.text.lowerRight('Kustom Mother-fucking-kommune!', '48px Josefin Slab', '#fff', 0.5))
-      //.image(watermark.image.lowerRight(0.5))
-      .render()
-      .image(watermark.text.upperLeft('Kustom Kommune!', '48px Josefin Slab', '#fff', 0.5, 48))
-      .then( (img) => {
-        this.imageResult = img.src;
-      });
-    */
-   /*
-    watermark(['images/wrench_logo.jpg'])//, '/images/kk_logo.jpg'])
-    .image(watermark.image.lowerRight(0.5))
-    .then( (img) => {
-
-      this.imageResult = img.src;
-      console.log('......', this.imageResult);
-    });
-    */
-    //console.log('just before ', this.resizedSourceImage);
     watermark([this.resizedSourceImage, this.resizedOverlay])
-    
       .image(watermark.image.center(0.5))
       .render()
-      
-      /*
-      .image(function(a, b){
-        console.log('image2 functions ', a, b);
-        b.width = 180;
-        b.height = 180;
-        console.log(b.width, b.height);
-        return [a, b];
-      })
-      */
-      //.render()
       .then( (img) => {
-        console.log('!!',img);
         this.imageResult = img[0].src;
       })
   }
