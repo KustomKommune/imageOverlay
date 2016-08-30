@@ -3,48 +3,27 @@
  **********************************************************************************************/
 /** Map relative paths to URLs. */
 var map = {
-    '@angular2-material': 'vendor/@angular2-material',
-    'watermarkjs': 'vendor/watermarkjs/dist/watermark.js'
+    '@angular2-material': 'vendor/@angular2-material/',
+    'jquery': 'vendor/jquery/dist/',
+    'watermarkjs': 'vendor/watermarkjs/dist/',
+    'rangesliderjs': 'vendor/rangeslider.js/dist/'
 };
 /** User packages configuration. */
 var packages = {
-    '@angular2-material/core': {
-        format: 'cjs',
-        defaultExtension: 'js',
-        main: 'core.js'
-    },
-    '@angular2-material/button': {
-        format: 'cjs',
-        defaultExtension: 'js',
-        main: 'button.js'
-    },
-    '@angular2-material/card': {
-        format: 'cjs',
-        defaultExtension: 'js',
-        main: 'card.js'
-    },
-    '@angular2-material/icon': {
-        format: 'cjs',
-        defaultExtension: 'js',
-        main: 'icon.js'
-    },
-    '@angular2-material/progress-circle': {
-        format: 'cjs',
-        defaultExtension: 'js',
-        main: 'progress-circle.js'
-    },
-    '@angular2-material/sidenav': {
-        format: 'cjs',
-        defaultExtension: 'js',
-        main: 'sidenav.js'
-    },
-    '@angular2-material/toolbar': {
-        format: 'cjs',
-        defaultExtension: 'js',
-        main: 'toolbar.js'
+    'jquery': {
+        main: 'jquery.min',
+        format: 'global',
+        defaultExtension: 'js'
     },
     'watermarkjs': {
-        format: 'cjs'
+        main: 'watermark.min',
+        format: 'global',
+        defaultExtension: 'js'
+    },
+    'rangesliderjs': {
+        main: 'rangeslider.min.js',
+        format: 'global',
+        defaultExtension: 'js'
     }
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -66,6 +45,8 @@ var barrels = [
     // App specific barrels.
     'app',
     'app/shared',
+    'app/image-placement',
+    'app/range-slider',
 ];
 var cliSystemConfigPackages = {};
 barrels.forEach(function (barrelName) {
@@ -82,4 +63,4 @@ System.config({
 });
 // Apply the user's configuration.
 System.config({ map: map, packages: packages });
-//# sourceMappingURL=system-config.js.map
+//# sourceMappingURL=../system-config.js.map
